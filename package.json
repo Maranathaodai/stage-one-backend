@@ -1,0 +1,32 @@
+{
+  "name": "string-analyzer-service",
+  "version": "1.0.0",
+  "description": "A RESTful API for analyzing and storing string properties",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "migrate": "node src/models/migrate.js",
+    "seed": "node src/scripts/seed.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "string",
+    "analyzer",
+    "api",
+    "express",
+    "mongodb"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mongodb": "^6.20.0",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "mongodb-memory-server": "^10.2.3",
+    "nodemon": "^3.0.2"
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "String Analyzer API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    { "url": "http://localhost:5051" }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health check",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "status": { "type": "string" } } } } }
+          }
+        }
+      }
+    },
+    "/strings": {
+      "post": {
+        "summary": "Create/Analyze String",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": { "value": { "type": "string" } },
+                "required": ["value"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Created" },
+          "409": { "description": "Conflict" },
+          "400": { "description": "Bad Request" },
+          "422": { "description": "Unprocessable Entity" }
+        }
+      },
+      "get": {
+        "summary": "Get all strings with filters",
+        "parameters": [
+          { "name": "is_palindrome", "in": "query", "schema": { "type": "boolean" } },
+          { "name": "min_length", "in": "query", "schema": { "type": "integer" } },
+          { "name": "max_length", "in": "query", "schema": { "type": "integer" } },
+          { "name": "word_count", "in": "query", "schema": { "type": "integer" } },
+          { "name": "contains_character", "in": "query", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/strings/{string_value}": {
+      "get": { "summary": "Get specific string", "parameters": [{"name":"string_value","in":"path","required":true,"schema":{"type":"string"}}], "responses": { "200": { "description": "OK" }, "404": { "description": "Not Found" } } },
+      "delete": { "summary": "Delete string", "parameters": [{"name":"string_value","in":"path","required":true,"schema":{"type":"string"}}], "responses": { "204": { "description": "No Content" }, "404": { "description": "Not Found" } } }
+    },
+    "/strings/filter-by-natural-language": {
+      "get": {
+        "summary": "Natural language filters",
+        "parameters": [ { "name": "query", "in": "query", "required": true, "schema": { "type": "string" } } ],
+        "responses": { "200": { "description": "OK" }, "400": { "description": "Bad Request" }, "422": { "description": "Unprocessable Entity" } }
+      }
+    }
+  }
+}

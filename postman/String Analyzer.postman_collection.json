@@ -1,0 +1,105 @@
+{
+  "info": {
+    "_postman_id": "f6a9d8d0-1a7f-4cb9-94d0-7f7f7d4aabcd",
+    "name": "String Analyzer",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "request": { "method": "GET", "url": "{{baseUrl}}/health" },
+      "event": [
+        { "listen": "test", "script": { "exec": [
+          "pm.test('OK', function () { pm.expect(pm.response.code).to.be.oneOf([200]); });"
+        ], "type": "text/javascript" } }
+      ]
+    },
+    {
+      "name": "Create String",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/strings",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"value\": \"racecar\"\n}" }
+      },
+      "event": [
+        { "listen": "test", "script": { "exec": [
+          "pm.test('Created', function () { pm.response.to.have.status(201); });",
+          "const json = pm.response.json();",
+          "pm.environment.set('stringValue', json.value);",
+          "pm.environment.set('stringId', json.id);"
+        ], "type": "text/javascript" } }
+      ]
+    },
+    {
+      "name": "Get All Strings",
+      "request": { "method": "GET", "url": "{{baseUrl}}/strings" },
+      "event": [
+        { "listen": "test", "script": { "exec": [
+          "pm.test('OK', function () { pm.response.to.have.status(200); });",
+          "const json = pm.response.json();",
+          "pm.expect(json).to.have.property('data');",
+          "pm.expect(json).to.have.property('count');"
+        ], "type": "text/javascript" } }
+      ]
+    },
+    {
+      "name": "Get One by Value",
+      "request": { "method": "GET", "url": "{{baseUrl}}/strings/{{stringValue}}" },
+      "event": [
+        { "listen": "test", "script": { "exec": [
+          "pm.test('OK', function () { pm.response.to.have.status(200); });"
+        ], "type": "text/javascript" } }
+      ]
+    },
+    {
+      "name": "Filter (Query Params)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/strings?is_palindrome=true&min_length=5&max_length=20&word_count=1&contains_character=a",
+          "host": ["{{baseUrl}}"],
+          "path": ["strings"],
+          "query": [
+            {"key":"is_palindrome","value":"true"},
+            {"key":"min_length","value":"5"},
+            {"key":"max_length","value":"20"},
+            {"key":"word_count","value":"1"},
+            {"key":"contains_character","value":"a"}
+          ]
+        }
+      },
+      "event": [
+        { "listen": "test", "script": { "exec": [
+          "pm.test('OK', function () { pm.response.to.have.status(200); });"
+        ], "type": "text/javascript" } }
+      ]
+    },
+    {
+      "name": "Natural Language Filter",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/strings/filter-by-natural-language?query=all%20single%20word%20palindromic%20strings",
+          "host": ["{{baseUrl}}"],
+          "path": ["strings","filter-by-natural-language"],
+          "query": [{"key":"query","value":"all single word palindromic strings"}]
+        }
+      },
+      "event": [
+        { "listen": "test", "script": { "exec": [
+          "pm.test('OK', function () { pm.response.to.have.status(200); });"
+        ], "type": "text/javascript" } }
+      ]
+    },
+    {
+      "name": "Delete by Value",
+      "request": { "method": "DELETE", "url": "{{baseUrl}}/strings/{{stringValue}}" },
+      "event": [
+        { "listen": "test", "script": { "exec": [
+          "pm.test('No Content', function () { pm.response.to.have.status(204); });"
+        ], "type": "text/javascript" } }
+      ]
+    }
+  ]
+}
