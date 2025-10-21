@@ -1,7 +1,5 @@
-// Simple manual test file - you can run these in Postman or use this as reference
-
 const testEndpoints = {
-  baseURL: 'http://localhost:3000',
+  baseURL: 'http://127.0.0.1:5051',
   
   tests: [
     {
@@ -70,10 +68,7 @@ const testEndpoints = {
   ]
 };
 
-// Export for use in actual testing frameworks
 module.exports = testEndpoints;
-
-// If you want to print them as curl commands:
 console.log('=== CURL TEST COMMANDS ===\n');
 testEndpoints.tests.forEach((test, i) => {
   console.log(`${i + 1}. ${test.name}`);

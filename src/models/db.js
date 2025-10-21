@@ -1,10 +1,8 @@
 const { MongoClient, ServerApiVersion } = require('mongodb');
 let MongoMemoryServer;
 try {
-  // Optional dependency; only required if using in-memory DB
   ({ MongoMemoryServer } = require('mongodb-memory-server'));
 } catch (e) {
-  // ignore if not installed
 }
 
 const useMemory = String(process.env.MONGODB_USE_MEMORY || '').toLowerCase() === 'true';

@@ -1,9 +1,7 @@
-// Quick test script to verify the API works
 const http = require('http');
 
 const baseURL = 'http://127.0.0.1:5051';
 
-// Test 1: Health check
 console.log('Testing health endpoint...');
 http.get(`${baseURL}/health`, (res) => {
   let data = '';
@@ -16,7 +14,6 @@ http.get(`${baseURL}/health`, (res) => {
   console.error('✗ Health check failed:', err.message);
 });
 
-// Test 2: Create a string
 function testCreateString() {
   const postData = JSON.stringify({ value: 'racecar' });
   
@@ -50,7 +47,6 @@ function testCreateString() {
   req.end();
 }
 
-// Test 3: Get the string
 function testGetString() {
   console.log('\nTesting GET /strings/racecar...');
   http.get(`${baseURL}/strings/racecar`, (res) => {
@@ -66,7 +62,6 @@ function testGetString() {
   });
 }
 
-// Test 4: Get all strings
 function testGetAll() {
   console.log('\nTesting GET /strings (get all)...');
   http.get(`${baseURL}/strings`, (res) => {

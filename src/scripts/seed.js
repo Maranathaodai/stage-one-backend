@@ -24,14 +24,11 @@ async function seed() {
     };
     try {
       await col.updateOne({ id: doc.id }, { $setOnInsert: doc }, { upsert: true });
-      console.log(`Seeded: ${value}`);
     } catch (e) {
-      console.error('Seed error:', e.message);
+      
     }
   }
-
-  console.log('Seeding complete');
   process.exit(0);
 }
 
-seed().catch((e) => { console.error(e); process.exit(1); });
+seed().catch((e) => { process.exit(1); });

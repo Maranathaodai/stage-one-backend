@@ -5,7 +5,7 @@ async function createString(req, res) {
   try {
     const { value } = req.body;
     
-    // Validation
+    
     if (value === undefined || value === null) {
       return res.status(400).json({ error: 'Missing "value" field' });
     }
@@ -18,13 +18,13 @@ async function createString(req, res) {
     const db = await connectDB();
     const collection = db.collection('strings');
     
-    // Check for duplicate
+    
     const existing = await collection.findOne({ id: props.sha256_hash });
     if (existing) {
       return res.status(409).json({ error: 'String already exists in the system' });
     }
     
-    // Insert into DB
+
     const document = {
       id: props.sha256_hash,
       value,
@@ -92,7 +92,7 @@ async function getAllStrings(req, res) {
     const db = await connectDB();
     const collection = db.collection('strings');
     
-    // Build filter object
+    
     const filter = {};
     const filters_applied = {};
     
@@ -160,8 +160,6 @@ async function filterByNaturalLanguage(req, res) {
     
     const queryLower = query.toLowerCase();
     const parsed_filters = {};
-    
-    // Parse natural language
     if (queryLower.includes('palindrom')) {
       parsed_filters.is_palindrome = true;
     }
@@ -169,28 +167,20 @@ async function filterByNaturalLanguage(req, res) {
     if (queryLower.includes('single word')) {
       parsed_filters.word_count = 1;
     }
-    
-    // Extract "longer than X" or "more than X characters"
   const longerThanMatch = queryLower.match(/(?:longer than (\d+))|(?:more than (\d+) characters?)/);
     if (longerThanMatch) {
       const num = parseInt(longerThanMatch[1] || longerThanMatch[2]);
       parsed_filters.min_length = num + 1;
     }
-    
-    // Extract "shorter than X" or "less than X characters"
   const shorterThanMatch = queryLower.match(/(?:shorter than (\d+))|(?:less than (\d+) characters?)/);
     if (shorterThanMatch) {
       const num = parseInt(shorterThanMatch[1] || shorterThanMatch[2]);
       parsed_filters.max_length = num - 1;
     }
-    
-    // Extract "containing letter X" or "contains the letter X"
     const containsMatch = queryLower.match(/contain(?:ing|s)? (?:the )?letter ([a-z])/);
     if (containsMatch) {
       parsed_filters.contains_character = containsMatch[1];
     }
-    
-    // Handle "first vowel" heuristic
     if (queryLower.includes('first vowel')) {
       parsed_filters.contains_character = 'a';
     }
@@ -199,7 +189,6 @@ async function filterByNaturalLanguage(req, res) {
       return res.status(400).json({ error: 'Unable to parse natural language query' });
     }
     
-    // Build MongoDB filter
     const db = await connectDB();
     const collection = db.collection('strings');
     const filter = {};
